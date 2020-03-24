@@ -1,7 +1,5 @@
 from players import Player, Robot
-from display import Window, Board
-
-from datetime import datetime
+from display import Board
 
 class History:
     """

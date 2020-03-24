@@ -1,4 +1,6 @@
 from position import Position
+from itertools import chain, takewhile
+from more_itertools import take, tail, first_true
 
 class Piece:
     """
@@ -7,7 +9,7 @@ class Piece:
     def __init__(self, color, coord, pieceType):
         self.color = color
         self.pos = Position(coord)
-        self.pieceType = pieceType
+        self.type = pieceType
 
 class Pawn:
 

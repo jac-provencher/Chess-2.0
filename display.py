@@ -1,3 +1,4 @@
+import pygame
 from itertools import chain
 
 class Window:
@@ -21,7 +22,7 @@ class Board:
         board = [['.' for x in range(8)] for y in range(8)]
         for piece in chain(self.player1.pieces, self.player2.pieces):
             x, y = piece.pos.x, piece.pos.y
-            board[8-y][x-1] = piece.pieceType
+            board[8-y][x-1] = piece.type
 
         return '\n'.join(' '.join(square for square in row) for row in board) + '\n'
 
