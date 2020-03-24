@@ -1,15 +1,19 @@
-from pieces import Piece
-from itertools import product
+from pieces import Pawn, Bishop, Queen, King, Knight, Rook
+from itertools import product, chain
+from more_itertools import flatten
 
 class Player:
     """
     Docstrings
     """
-    def __init__(self, color):
+    def __init__(self, color, player=1):
 
+        y = 1 if player == 1 else 8
         self.color = color
-        self.pieces = [Piece(color, coord, pieceType) for coord, pieceType in
-                      zip(product(range(1, 9), range(1, 3)), 'TPCPFPQPKPFPCPTP')]
+        self.pawns = [Pawn(color, (x, (2 if player == 1 else 7))) for x in range(1, 9)]
+        self.king = King(color, (5, y))
+        self.pieces = [Rook(color, (1, y)), Rook(color, (8, y)), Knight(color, (2, y)), Knight(color, (7, y)),
+        Bishop(color, (3, y)), Bishop(color, (6, y)), Queen(color, (4, y)), self.king] + self.pawns
 
     def move(self, pos1, pos2):
         """
@@ -53,12 +57,6 @@ class Robot(Player):
     """
     Docstrings
     """
-    def __init__(self, color):
-
-        super().__init__(color)
-        self.pieces = [Piece(color, coord, pieceType) for coord, pieceType in
-                       zip(product(range(1, 9), range(7, 9)), 'ptpcpfpqpkpfpcpt')]
-
     def minimax(self):
         """
         Docstrings

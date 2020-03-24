@@ -6,53 +6,52 @@ class Piece:
     """
     Docstrings
     """
-    def __init__(self, color, coord, pieceType):
+    def __init__(self, color, coord):
         self.color = color
         self.pos = Position(coord)
-        self.type = pieceType
 
-class Pawn:
-
+class Pawn(Piece):
+    string = 'P'
     def validMoves(self, board):
         """
         Docstrings
         """
         pass
 
-class Tour:
-
+class Rook(Piece):
+    string = 'T'
     def validMoves(self, board):
         """
         Docstrings
         """
         pass
 
-class Cheval:
-
+class Knight(Piece):
+    string = 'C'
     def validMoves(self, board):
         """
         Docstrings
         """
         pass
 
-class Fou:
-
+class Bishop(Piece):
+    string = 'F'
     def validMoves(self, board):
         """
         Docstrings
         """
         pass
 
-class Queen:
-
+class Queen(Piece):
+    string = 'Q'
     def validMoves(self, board):
         """
         Docstrings
         """
         pass
 
-class King:
-
+class King(Piece):
+    string = 'K'
     def validMoves(self, board):
         """
         Docstrings

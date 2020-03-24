@@ -39,8 +39,8 @@ class Game:
 
     def __init__(self, color='white'):
 
-        self.player1 = Player(color)
-        self.player2 = Robot(self.switchColor[color])
+        self.player1 = Player(color, player=1)
+        self.player2 = Robot(self.switchColor[color], player=2)
         self.board = Board(self.player1, self.player2)
         self.history = History()
 
