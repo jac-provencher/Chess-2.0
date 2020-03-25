@@ -1,6 +1,9 @@
 from pieces import Pawn, Bishop, Queen, King, Knight, Rook
-from itertools import product, chain
-from more_itertools import flatten
+
+"""
+TODO
+isLegalMove needs a Board, but we don't have any...
+"""
 
 class Player:
     """
@@ -15,15 +18,17 @@ class Player:
         self.pieces = [Rook(color, (1, y)), Rook(color, (8, y)), Knight(color, (2, y)), Knight(color, (7, y)),
         Bishop(color, (3, y)), Bishop(color, (6, y)), Queen(color, (4, y)), self.king] + self.pawns
 
-    def move(self, pos1, pos2):
+    def move(self, pos1, pos2, gamestate):
         """
         Docstrings
         """
         for piece in self.pieces:
             currentPosition = (piece.pos.x, piece.pos.y)
-            if currentPosition == pos1 and self.isLegalMove(pos1, pos2):
+            if currentPosition == pos1 and pos2 in piece.validMoves(gamestate):
                 piece.pos.x, piece.pos.y = pos2
                 break
+        # else:
+            # raise...
 
     def eat(self, opponent, pos1, pos2):
         """
@@ -31,12 +36,6 @@ class Player:
         """
         self.move(pos1, pos2)
         opponent.removePiece(pos2)
-
-    def isLegalMove(self, pos1, pos2):
-        """
-        Docstrings
-        """
-        return True
 
     def promote(self):
         """
@@ -52,6 +51,8 @@ class Player:
             if (piece.pos.x, piece.pos.y) == position:
                 del self.pieces[i]
                 break
+        # else:
+            # raise...
 
 class Robot(Player):
     """

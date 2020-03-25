@@ -1,5 +1,6 @@
 from players import Player, Robot
 from display import Board
+from itertools import chain
 
 class History:
     """
@@ -42,6 +43,7 @@ class Game:
         self.player1 = Player(color, player=1)
         self.player2 = Robot(self.switchColor[color], player=2)
         self.board = Board(self.player1, self.player2)
+        self.gamestate = list(chain(self.player1.pieces, self.player2.pieces))
         self.history = History()
 
     def isCheckmate(self):
@@ -63,7 +65,15 @@ class Game:
         pass
 
     def mainloop(self):
-        pass
+
+        self.player1.move((1, 2), (1, 4), self.gamestate)
+        self.player1.move((5, 2), (5, 4), self.gamestate)
+        print(self.board)
+        self.player1.move((1, 1), (1, 3), self.gamestate)
+        print(self.board)
+        self.player1.move((5, 1), (5, 2), self.gamestate)
 
 game = Game(color='white')
+print(game.board)
+game.mainloop()
 print(game.board)

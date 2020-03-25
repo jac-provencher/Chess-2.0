@@ -5,6 +5,7 @@ class Position:
     def __init__(self, position=(None, None)):
 
         self.x, self.y = position
+        self.vectors = [(0, 1), (0, -1), (-1, 0), (1, 0), (1, 1), (1, -1), (-1, -1), (-1, 1)]
         self.conversion = dict(zip(range(1, 9), 'abcdefgh'))
 
     def convert(self, coord):
