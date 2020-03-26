@@ -1,6 +1,7 @@
 from position import Position
 from itertools import takewhile, product, chain
 from more_itertools import take, tail
+import pygame
 
 class Piece:
     """
@@ -21,26 +22,41 @@ class Piece:
 
 class Pawn(Piece):
     string = 'P'
+
     def __init__(self, color, coord):
         super().__init__(color, coord)
         self.startingLine = coord[1]
         self.direction = 1 if coord[1] == 2 else -1
-        self.move = (self.pos.x, self.pos.y + self.direction)
+        self.image = pygame.image.load(f"images/pion_{self.color}.png")
 
     def moves(self, gamestate):
         """
         Docstrings
         """
-        return [self.move, (self.pos.x, self.pos.y + 2*self.direction)] if self.pos.y == self.startingLine else list(self.move)
+        move = (self.pos.x, self.pos.y + self.direction)
 
-    def attacks(self, gamestate):
+        return [move, (self.pos.x, self.pos.y + 2*self.direction)] if self.pos.y == self.startingLine else [move]
+
+    def captures(self, gamestate):
         """
         Docstrings
         """
-        pass
+        attacks = []
+        for piece in gamestate:
+            isOpponent = piece.color == self.switchColor[self.color]
+            legalAttack = (piece.pos.x, piece.pos.y) in ((self.pos.x + 1, self.pos.y + 1), (self.pos.x - 1, self.pos.y + 1))
+            if isOpponent and legalAttack:
+                attacks.append((piece.pos.x, piece.pos.y))
+
+        return attacks
 
 class Rook(Piece):
     string = 'T'
+    def __init__(self, color, coord):
+
+        super().__init__(color, coord)
+        self.image = pygame.image.load(f"images/tour_{self.color}.png")
+
     def moves(self, gamestate):
         """
         Docstrings
@@ -67,7 +83,7 @@ class Rook(Piece):
             n = 1
             while self.isOnBoard(position := (self.pos.x + i*n, self.pos.y + j*n)):
                 if position in gamestate:
-                    if gamestate[position] == self.switchColor[self.color]:
+                    if gamestate.get(position) == self.switchColor[self.color]:
                         attacks.append(position)
                     break
                 n += 1
@@ -76,6 +92,11 @@ class Rook(Piece):
 
 class Knight(Piece):
     string = 'C'
+    def __init__(self, color, coord):
+
+        super().__init__(color, coord)
+        self.image = pygame.image.load(f"images/cheval_{self.color}.png")
+
     def moves(self, gamestate):
         """
         Docstrings
@@ -83,7 +104,8 @@ class Knight(Piece):
         gamestate = [(piece.pos.x, piece.pos.y) for piece in gamestate]
         moves = []
         for dx, dy in chain(product((-1, 1), (-2, 2)), product((-2, 2), (-1, 1))):
-            if (self.pos.x+dx, self.pos.y+dy) not in gamestate and self.isOnBoard(move := (self.pos.x+dx, self.pos.y+dy)):
+            move = (self.pos.x + dx, self.pos.y + dy)
+            if move not in gamestate and self.isOnBoard(move):
                 moves.append(move)
 
         return moves
@@ -92,10 +114,22 @@ class Knight(Piece):
         """
         Docstrings
         """
-        pass
+        opponents = [(piece.pos.x, piece.pos.y) for piece in gamestate if piece.color == self.switchColor[self.color]]
+        attacks = []
+        for dx, dy in chain(product((-1, 1), (-2, 2)), product((-2, 2), (-1, 1))):
+            attack = (self.pos.x + dx, self.pos.y + dy)
+            if attack in opponents and self.isOnBoard(attack):
+                attacks.append(attack)
+
+        return attacks
 
 class Bishop(Piece):
     string = 'F'
+    def __init__(self, color, coord):
+
+        super().__init__(color, coord)
+        self.image = pygame.image.load(f"images/fou_{self.color}.png")
+
     def moves(self, gamestate):
         """
         Docstrings
@@ -116,10 +150,26 @@ class Bishop(Piece):
         """
         Docstrings
         """
-        pass
+        gamestate = {(piece.pos.x, piece.pos.y):piece.color for piece in board}
+        attacks = []
+        for i, j in tail(4, self.pos.vectors):
+            n = 1
+            while self.isOnBoard(position := (self.pos.x + i*n, self.pos.y + j*n)):
+                if position in gamestate:
+                    if gamestate[position] == self.switchColor[self.color]:
+                        attacks.append(position)
+                    break
+                n += 1
+
+        return attacks
 
 class Queen(Piece):
     string = 'Q'
+    def __init__(self, color, coord):
+
+        super().__init__(color, coord)
+        self.image = pygame.image.load(f"images/reine_{self.color}.png")
+
     def moves(self, gamestate):
         """
         Docstrings
@@ -140,10 +190,26 @@ class Queen(Piece):
         """
         Docstrings
         """
-        pass
+        gamestate = {(piece.pos.x, piece.pos.y):piece.color for piece in board}
+        attacks = []
+        for i, j in self.pos.vectors:
+            n = 1
+            while self.isOnBoard(position := (self.pos.x + i*n, self.pos.y + j*n)):
+                if position in gamestate:
+                    if gamestate.get(position) == self.switchColor[self.color]:
+                        attacks.append(position)
+                    break
+                n += 1
+
+        return attacks
 
 class King(Piece):
     string = 'K'
+    def __init__(self, color, coord):
+
+        super().__init__(color, coord)
+        self.image = pygame.image.load(f"images/roi_{self.color}.png")
+
     def moves(self, gamestate):
         """
         Docstrings
@@ -151,7 +217,8 @@ class King(Piece):
         gamestate = [(piece.pos.x, piece.pos.y) for piece in gamestate]
         moves = []
         for i, j in self.pos.vectors:
-            if (self.pos.x+i, self.pos.y+j) not in gamestate and self.isOnBoard(move := (self.pos.x+i, self.pos.y+j)):
+            move = (self.pos.x + i, self.pos.y + j)
+            if move not in gamestate and self.isOnBoard(move):
                 moves.append(move)
 
         return moves
@@ -160,4 +227,11 @@ class King(Piece):
         """
         Docstrings
         """
-        pass
+        opponents = [(piece.pos.x, piece.pos.y) for piece in gamestate if piece.color == self.switchColor[self.color]]
+        attacks = []
+        for i, j in self.pos.vectors:
+            attack = (self.pos.x + i, self.pos.y + j)
+            if attack in opponents and self.isOnBoard(attack):
+                attacks.append(attack)
+
+        return attacks

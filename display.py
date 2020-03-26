@@ -1,13 +1,6 @@
 import pygame
 from itertools import chain
 
-class Window:
-    """
-    Docstrings
-    """
-    def __init__(self):
-        pass
-
 class Board:
     """
     Docstrings
@@ -27,4 +20,44 @@ class Board:
         return '\n'.join(' '.join(square for square in row) for row in board) + '\n'
 
     def pygameDisplay(self):
-        screen = Window()
+
+        window = Window()
+        running = True
+        self.player1.turnToPlay = True
+
+        while running:
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+            window.redraw(window.screen, self.player1.pieces + self.player2.pieces)
+
+        pygame.quit()
+
+class Window:
+    """
+    Docstrings
+    """
+    screenDimension = (696, 696)
+    cellDimension = 696//8
+
+    board = pygame.image.load("images/board.png")
+    squareContour = pygame.image.load("images/contour.png")
+    circle = pygame.image.load("images/circle.png")
+
+    def __init__(self):
+
+        pygame.init()
+        pygame.display.set_caption("Chess")
+        self.screen = pygame.display.set_mode(self.screenDimension)
+
+    def redraw(self, screen, pieces):
+
+        screen.blit(self.board, (0, 0))
+
+        for piece in pieces:
+            position = piece.pos.convert_inPixel()
+            screen.blit(piece.image, position)
+
+        pygame.display.update()

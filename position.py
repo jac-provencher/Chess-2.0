@@ -8,8 +8,14 @@ class Position:
         self.vectors = [(0, 1), (0, -1), (-1, 0), (1, 0), (1, 1), (1, -1), (-1, -1), (-1, 1)]
         self.conversion = dict(zip(range(1, 9), 'abcdefgh'))
 
-    def convert(self, coord):
+    def convert_inString(self, coord):
         """
         Docstrings
         """
         return self.conversion[coord[0]] + str(coord[1])
+
+    def convert_inPixel(self):
+        """
+        Docstrings
+        """
+        return 87*(self.x - 1), 696 - 87*self.y
