@@ -1,11 +1,13 @@
 from position import Position
-from itertools import takewhile
+from itertools import takewhile, product, chain
 from more_itertools import take, tail
 
 class Piece:
     """
     Docstrings
     """
+    switchColor = {'white' : 'black', 'black' : 'white'}
+
     def __init__(self, color, coord):
         self.color = color
         self.pos = Position(coord)
@@ -15,27 +17,31 @@ class Piece:
         Docstrings
         """
         x, y = position
-
         return 1 <= x <= 8 and 1 <= y <= 8
 
 class Pawn(Piece):
     string = 'P'
-
     def __init__(self, color, coord):
         super().__init__(color, coord)
         self.startingLine = coord[1]
         self.direction = 1 if coord[1] == 2 else -1
         self.move = (self.pos.x, self.pos.y + self.direction)
 
-    def validMoves(self, gamestate):
+    def moves(self, gamestate):
         """
         Docstrings
         """
         return [self.move, (self.pos.x, self.pos.y + 2*self.direction)] if self.pos.y == self.startingLine else list(self.move)
 
+    def attacks(self, gamestate):
+        """
+        Docstrings
+        """
+        pass
+
 class Rook(Piece):
     string = 'T'
-    def validMoves(self, gamestate):
+    def moves(self, gamestate):
         """
         Docstrings
         """
@@ -51,9 +57,26 @@ class Rook(Piece):
 
         return moves
 
+    def captures(self, board):
+        """
+        Docstrings
+        """
+        gamestate = {(piece.pos.x, piece.pos.y):piece.color for piece in board}
+        attacks = []
+        for i, j in take(4, self.pos.vectors):
+            n = 1
+            while self.isOnBoard(position := (self.pos.x + i*n, self.pos.y + j*n)):
+                if position in gamestate:
+                    if gamestate[position] == self.switchColor[self.color]:
+                        attacks.append(position)
+                    break
+                n += 1
+
+        return attacks
+
 class Knight(Piece):
     string = 'C'
-    def validMoves(self, gamestate):
+    def moves(self, gamestate):
         """
         Docstrings
         """
@@ -65,9 +88,15 @@ class Knight(Piece):
 
         return moves
 
+    def attacks(self, gamestate):
+        """
+        Docstrings
+        """
+        pass
+
 class Bishop(Piece):
     string = 'F'
-    def validMoves(self, gamestate):
+    def moves(self, gamestate):
         """
         Docstrings
         """
@@ -83,9 +112,15 @@ class Bishop(Piece):
 
         return moves
 
+    def attacks(self, gamestate):
+        """
+        Docstrings
+        """
+        pass
+
 class Queen(Piece):
     string = 'Q'
-    def validMoves(self, gamestate):
+    def moves(self, gamestate):
         """
         Docstrings
         """
@@ -101,9 +136,15 @@ class Queen(Piece):
 
         return moves
 
+    def attacks(self, gamestate):
+        """
+        Docstrings
+        """
+        pass
+
 class King(Piece):
     string = 'K'
-    def validMoves(self, gamestate):
+    def moves(self, gamestate):
         """
         Docstrings
         """
@@ -114,3 +155,9 @@ class King(Piece):
                 moves.append(move)
 
         return moves
+
+    def attacks(self, gamestate):
+        """
+        Docstrings
+        """
+        pass

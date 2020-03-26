@@ -2,6 +2,7 @@ from players import Player, Robot
 from display import Board
 from itertools import chain
 
+
 class History:
     """
     Docstrings
@@ -72,6 +73,10 @@ class Game:
         self.player1.move((1, 1), (1, 3), self.gamestate)
         print(self.board)
         self.player1.move((5, 1), (5, 2), self.gamestate)
+        self.player1.move((1, 3), (2, 3), self.gamestate)
+        print(self.board)
+        self.player1.eat(self.player2, (2, 3), (2, 7), self.gamestate)
+        self.player1.move((2, 7), (2, 5), self.gamestate)
 
 game = Game(color='white')
 print(game.board)

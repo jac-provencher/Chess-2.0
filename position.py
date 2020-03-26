@@ -2,7 +2,7 @@ class Position:
     """
     Docstrings
     """
-    def __init__(self, position=(None, None)):
+    def __init__(self, position):
 
         self.x, self.y = position
         self.vectors = [(0, 1), (0, -1), (-1, 0), (1, 0), (1, 1), (1, -1), (-1, -1), (-1, 1)]

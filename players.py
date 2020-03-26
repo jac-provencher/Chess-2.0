@@ -24,17 +24,21 @@ class Player:
         """
         for piece in self.pieces:
             currentPosition = (piece.pos.x, piece.pos.y)
-            if currentPosition == pos1 and pos2 in piece.validMoves(gamestate):
+            if currentPosition == pos1 and pos2 in piece.moves(gamestate):
                 piece.pos.x, piece.pos.y = pos2
                 break
         # else:
             # raise...
 
-    def eat(self, opponent, pos1, pos2):
+    def eat(self, opponent, pos1, pos2, board):
         """
         Docstrings
         """
-        self.move(pos1, pos2)
+        for piece in self.pieces:
+            currentPosition = (piece.pos.x, piece.pos.y)
+            if currentPosition == pos1 and pos2 in piece.captures(board):
+                piece.pos.x, piece.pos.y = pos2
+                break
         opponent.removePiece(pos2)
 
     def promote(self):
