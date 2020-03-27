@@ -22,8 +22,8 @@ class Piece:
 
 class Pawn(Piece):
     string = 'P'
-
     def __init__(self, color, coord):
+
         super().__init__(color, coord)
         self.startingLine = coord[1]
         self.direction = 1 if coord[1] == 2 else -1

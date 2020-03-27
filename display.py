@@ -19,22 +19,6 @@ class Board:
 
         return '\n'.join(' '.join(square for square in row) for row in board) + '\n'
 
-    def pygameDisplay(self):
-
-        window = Window()
-        running = True
-        self.player1.turnToPlay = True
-
-        while running:
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-
-            window.redraw(window.screen, self.player1.pieces + self.player2.pieces)
-
-        pygame.quit()
-
 class Window:
     """
     Docstrings

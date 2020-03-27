@@ -17,7 +17,6 @@ class Player:
         self.king = King(color, (5, y))
         self.pieces = [Rook(color, (1, y)), Rook(color, (8, y)), Knight(color, (2, y)), Knight(color, (7, y)),
         Bishop(color, (3, y)), Bishop(color, (6, y)), Queen(color, (4, y)), self.king] + self.pawns
-
         self.turnToPlay = False
 
     def move(self, pos1, pos2, gamestate):

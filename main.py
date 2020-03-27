@@ -1,5 +1,6 @@
+import pygame
 from players import Player, Robot
-from display import Board
+from display import Board, Window
 from itertools import chain
 
 
@@ -48,7 +49,25 @@ class Game:
         self.history = History()
 
     def mainloop(self):
-        self.board.pygameDisplay()
+        """
+        Docstrings
+        """
+        window = Window()
+        running = True
+        self.player1.turnToPlay = True
+
+        while running:
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    pass
+
+            window.redraw(window.screen, self.gamestate)
+
+        pygame.quit()
+
 
 game = Game(color='white')
 print(game.board)
