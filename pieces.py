@@ -26,7 +26,8 @@ class Pawn(Piece):
 
         super().__init__(color, coord)
         self.startingLine = coord[1]
-        self.direction = 1 if coord[1] == 2 else -1
+        self.endingLine, self.direction = (8, 1) if coord[1] == 2 else (1, -1)
+        self.unicode = '♙' if self.color == 'black' else '♟'
         self.image = pygame.image.load(f"images/pion_{self.color}.png")
 
     def moves(self, gamestate):
@@ -56,6 +57,7 @@ class Rook(Piece):
 
         super().__init__(color, coord)
         self.image = pygame.image.load(f"images/tour_{self.color}.png")
+        self.unicode = '♖' if self.color == 'black' else '♜'
 
     def moves(self, gamestate):
         """
@@ -83,7 +85,7 @@ class Rook(Piece):
             n = 1
             while self.isOnBoard(position := (self.pos.x + i*n, self.pos.y + j*n)):
                 if position in gamestate:
-                    if gamestate.get(position) == self.switchColor[self.color]:
+                    if gamestate[position] == self.switchColor[self.color]:
                         attacks.append(position)
                     break
                 n += 1
@@ -96,6 +98,7 @@ class Knight(Piece):
 
         super().__init__(color, coord)
         self.image = pygame.image.load(f"images/cheval_{self.color}.png")
+        self.unicode = '♘' if self.color == 'black' else '♞'
 
     def moves(self, gamestate):
         """
@@ -129,6 +132,7 @@ class Bishop(Piece):
 
         super().__init__(color, coord)
         self.image = pygame.image.load(f"images/fou_{self.color}.png")
+        self.unicode = '♗' if self.color == 'black' else '♝'
 
     def moves(self, gamestate):
         """
@@ -169,6 +173,7 @@ class Queen(Piece):
 
         super().__init__(color, coord)
         self.image = pygame.image.load(f"images/reine_{self.color}.png")
+        self.unicode = '♕' if self.color == 'black' else '♛'
 
     def moves(self, gamestate):
         """
@@ -196,7 +201,7 @@ class Queen(Piece):
             n = 1
             while self.isOnBoard(position := (self.pos.x + i*n, self.pos.y + j*n)):
                 if position in gamestate:
-                    if gamestate.get(position) == self.switchColor[self.color]:
+                    if gamestate[position] == self.switchColor[self.color]:
                         attacks.append(position)
                     break
                 n += 1
@@ -209,6 +214,7 @@ class King(Piece):
 
         super().__init__(color, coord)
         self.image = pygame.image.load(f"images/roi_{self.color}.png")
+        self.unicode = '♔' if self.color == 'black' else '♚'
 
     def moves(self, gamestate):
         """

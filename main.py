@@ -1,6 +1,7 @@
 import pygame
-from players import Player, Robot
+from players import ChessError, Player, Robot
 from display import Board, Window
+from position import Position
 from itertools import chain
 
 
@@ -53,16 +54,45 @@ class Game:
         Docstrings
         """
         window = Window()
+        click1 = Position((0, 0))
+        click2 = Position((0, 0))
+        self.player1.turn = True
         running = True
-        self.player1.turnToPlay = True
 
         while running:
 
             for event in pygame.event.get():
+
                 if event.type == pygame.QUIT:
                     running = False
+
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    pass
+
+                    if not click1.x or not click1.y:
+                        click1.x, click1.y = event.pos
+                    elif click1.x and click1.y:
+                        click2.x, click2.y = event.pos
+
+                        pos1 = click1.convert_inBoardCoordinate()
+                        pos2 = click2.convert_inBoardCoordinate()
+
+                        try:
+                            if self.player1.turn:
+                                opponent = [(piece.pos.x, piece.pos.y) for piece in self.player2.pieces]
+                                if pos2 in opponent:
+                                    self.player1.eat(self.player2, pos1, pos2, self.gamestate)
+                                else:
+                                    self.player1.move(pos1, pos2, self.gamestate)
+
+                        except ChessError as error:
+                            print(error)
+                            click1.x, click1.y, click2.x, click2.y = 0, 0, 0, 0
+                        else:
+                            self.player1.turn = True
+                            self.player2.turn = True
+                            click1.x, click1.y, click2.x, click2.y = 0, 0, 0, 0
+
+                            print(self.board)
 
             window.redraw(window.screen, self.gamestate)
 

@@ -1,9 +1,9 @@
 from pieces import Pawn, Bishop, Queen, King, Knight, Rook
 
-"""
-TODO
-isLegalMove needs a Board, but we don't have any...
-"""
+class ChessError(Exception):
+    """
+    Docstrings
+    """
 
 class Player:
     """
@@ -17,7 +17,7 @@ class Player:
         self.king = King(color, (5, y))
         self.pieces = [Rook(color, (1, y)), Rook(color, (8, y)), Knight(color, (2, y)), Knight(color, (7, y)),
         Bishop(color, (3, y)), Bishop(color, (6, y)), Queen(color, (4, y)), self.king] + self.pawns
-        self.turnToPlay = False
+        self.turn = False
 
     def move(self, pos1, pos2, gamestate):
         """
@@ -28,8 +28,8 @@ class Player:
             if currentPosition == pos1 and pos2 in piece.moves(gamestate):
                 piece.pos.x, piece.pos.y = pos2
                 break
-        # else:
-            # raise...
+        else:
+            raise ChessError("Déplacement invalide.")
 
     def eat(self, opponent, pos1, pos2, board):
         """
@@ -39,26 +39,30 @@ class Player:
             currentPosition = (piece.pos.x, piece.pos.y)
             if currentPosition == pos1 and pos2 in piece.captures(board):
                 piece.pos.x, piece.pos.y = pos2
+                opponent.removePiece(pos2)
                 break
-
-        opponent.removePiece(pos2)
+        else:
+            raise ChessError("Aucune pièce n'a pu être éliminée.")
 
     def promote(self):
         """
         Docstrings
         """
-        pass
+        for i, pawn in enumerate(self.pawns):
+            if pawn.pos.y == pawn.endingLine:
+                self.pawns[i] = Queen(self.color, (pawn.pos.x, pawn.pos.y))
+                return True
+
+        return False
 
     def removePiece(self, position):
         """
         Docstrings
         """
-        for i, piece in enumerate(self.pieces):
+        for piece in self.pieces:
             if (piece.pos.x, piece.pos.y) == position:
-                del self.pieces[i]
+                self.pieces.remove(piece)
                 break
-        # else:
-            # raise...
 
     def isCheckmate(self):
         """

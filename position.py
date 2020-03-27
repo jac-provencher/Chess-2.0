@@ -19,3 +19,12 @@ class Position:
         Docstrings
         """
         return 87*(self.x - 1), 696 - 87*self.y
+
+    def convert_inBoardCoordinate(self):
+        """
+        Docstrings
+        """
+        self.x = self.x//87 + 1
+        self.y = 8 - self.y//87
+
+        return self.x, self.y
