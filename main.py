@@ -53,7 +53,7 @@ class Game:
         """
         Docstrings
         """
-        window = Window()
+        window = Window(self.player1, self.player2)
         click1 = Position((0, 0))
         click2 = Position((0, 0))
         self.player1.turn = True
@@ -86,15 +86,17 @@ class Game:
 
                         except ChessError as error:
                             print(error)
+                            print(f"click1 = ({click1.x}, {click1.y})\nclick2 = ({click2.x}, {click2.y})")
                             click1.x, click1.y, click2.x, click2.y = 0, 0, 0, 0
+
                         else:
+                            print(f"click1 = ({click1.x}, {click1.y})\nclick2 = ({click2.x}, {click2.y})")
+                            print(self.board)
+                            click1.x, click1.y, click2.x, click2.y = 0, 0, 0, 0
                             self.player1.turn = True
                             self.player2.turn = True
-                            click1.x, click1.y, click2.x, click2.y = 0, 0, 0, 0
 
-                            print(self.board)
-
-            window.redraw(window.screen, self.gamestate)
+            window.redraw()
 
         pygame.quit()
 

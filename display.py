@@ -31,18 +31,20 @@ class Window:
     squareContour = pygame.image.load("images/contour.png")
     circle = pygame.image.load("images/circle.png")
 
-    def __init__(self):
+    def __init__(self, player1, player2):
 
         pygame.init()
         pygame.display.set_caption("Chess")
+        self.player1 = player1
+        self.player2 = player2
         self.screen = pygame.display.set_mode(self.screenDimension)
 
-    def redraw(self, screen, pieces):
+    def redraw(self):
 
-        screen.blit(self.board, (0, 0))
+        self.screen.blit(self.board, (0, 0))
 
-        for piece in pieces:
+        for piece in chain(self.player1.pieces, self.player2.pieces):
             position = piece.pos.convert_inPixel()
-            screen.blit(piece.image, position)
+            self.screen.blit(piece.image, position)
 
         pygame.display.update()

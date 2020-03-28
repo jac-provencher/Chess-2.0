@@ -75,11 +75,11 @@ class Rook(Piece):
 
         return moves
 
-    def captures(self, board):
+    def captures(self, gamestate):
         """
         Docstrings
         """
-        gamestate = {(piece.pos.x, piece.pos.y):piece.color for piece in board}
+        gamestate = {(piece.pos.x, piece.pos.y):piece.color for piece in gamestate}
         attacks = []
         for i, j in take(4, self.pos.vectors):
             n = 1
@@ -113,7 +113,7 @@ class Knight(Piece):
 
         return moves
 
-    def attacks(self, gamestate):
+    def captures(self, gamestate):
         """
         Docstrings
         """
@@ -150,11 +150,11 @@ class Bishop(Piece):
 
         return moves
 
-    def attacks(self, gamestate):
+    def captures(self, gamestate):
         """
         Docstrings
         """
-        gamestate = {(piece.pos.x, piece.pos.y):piece.color for piece in board}
+        gamestate = {(piece.pos.x, piece.pos.y):piece.color for piece in gamestate}
         attacks = []
         for i, j in tail(4, self.pos.vectors):
             n = 1
@@ -191,11 +191,11 @@ class Queen(Piece):
 
         return moves
 
-    def attacks(self, gamestate):
+    def captures(self, gamestate):
         """
         Docstrings
         """
-        gamestate = {(piece.pos.x, piece.pos.y):piece.color for piece in board}
+        gamestate = {(piece.pos.x, piece.pos.y):piece.color for piece in gamestate}
         attacks = []
         for i, j in self.pos.vectors:
             n = 1
@@ -229,7 +229,7 @@ class King(Piece):
 
         return moves
 
-    def attacks(self, gamestate):
+    def captures(self, gamestate):
         """
         Docstrings
         """
