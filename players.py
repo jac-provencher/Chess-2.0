@@ -11,7 +11,7 @@ class Player:
     """
     def __init__(self, color, player=1):
 
-        y = 1 if player == 1 else 8
+        self.name, y = ('player1', 1) if player == 1 else ('player2', 8)
         self.color = color
         self.pawns = [Pawn(color, (x, (2 if player == 1 else 7))) for x in range(1, 9)]
         self.king = King(color, (5, y))
@@ -27,6 +27,7 @@ class Player:
             currentPosition = (piece.pos.x, piece.pos.y)
             if currentPosition == pos1 and pos2 in piece.moves(gamestate):
                 piece.pos.x, piece.pos.y = pos2
+                self.promote()
                 break
         else:
             raise ChessError("Déplacement invalide.")
@@ -40,6 +41,7 @@ class Player:
             if currentPosition == pos1 and pos2 in piece.captures(board):
                 piece.pos.x, piece.pos.y = pos2
                 opponent.removePiece(pos2)
+                self.promote()
                 break
         else:
             raise ChessError("Aucune pièce n'a pu être éliminée.")
@@ -48,12 +50,12 @@ class Player:
         """
         Docstrings
         """
-        for i, pawn in enumerate(self.pawns):
+        for pawn in self.pawns:
             if pawn.pos.y == pawn.endingLine:
-                self.pawns[i] = Queen(self.color, (pawn.pos.x, pawn.pos.y))
-                return True
-
-        return False
+                self.pawns.remove(pawn)
+                self.pieces.remove(pawn)
+                self.pieces.append(Queen(self.color, (pawn.pos.x, pawn.pos.y)))
+                break
 
     def removePiece(self, position):
         """

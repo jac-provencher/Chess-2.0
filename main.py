@@ -15,11 +15,17 @@ class History:
 
         self.record = []
 
-    def addMove(self, move):
+    def __str__(self):
         """
         Docstrings
         """
-        self.record.append(self.uci(move))
+        return '\n'.join(f"{player} a joué {move}" for player, move in self.record)
+
+    def addMove(self, player, move):
+        """
+        Docstrings
+        """
+        self.record.append((player.name, self.uci(move)))
 
     def clearAll(self):
         """
@@ -86,15 +92,14 @@ class Game:
 
                         except ChessError as error:
                             print(error)
-                            print(f"click1 = ({click1.x}, {click1.y})\nclick2 = ({click2.x}, {click2.y})")
                             click1.x, click1.y, click2.x, click2.y = 0, 0, 0, 0
 
                         else:
-                            print(f"click1 = ({click1.x}, {click1.y})\nclick2 = ({click2.x}, {click2.y})")
                             print(self.board)
                             click1.x, click1.y, click2.x, click2.y = 0, 0, 0, 0
                             self.player1.turn = True
                             self.player2.turn = True
+                            self.history.addMove(self.player1, (pos1, pos2))
 
             window.redraw()
 
