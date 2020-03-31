@@ -27,7 +27,8 @@ class Player:
             currentPosition = (piece.pos.x, piece.pos.y)
             if currentPosition == pos1 and pos2 in piece.moves(gamestate):
                 piece.pos.x, piece.pos.y = pos2
-                self.promote()
+                if piece.string == 'P' and piece.pos.y == piece.endingLine:
+                    self.promote(piece)
                 break
         else:
             raise ChessError("Déplacement invalide.")
@@ -41,21 +42,19 @@ class Player:
             if currentPosition == pos1 and pos2 in piece.captures(board):
                 piece.pos.x, piece.pos.y = pos2
                 opponent.removePiece(pos2)
-                self.promote()
+                if piece.string == 'P' and piece.pos.y == piece.endingLine:
+                    self.promote(piece)
                 break
         else:
             raise ChessError("Aucune pièce n'a pu être éliminée.")
 
-    def promote(self):
+    def promote(self, pawn):
         """
         Docstrings
         """
-        for pawn in self.pawns:
-            if pawn.pos.y == pawn.endingLine:
-                self.pawns.remove(pawn)
-                self.pieces.remove(pawn)
-                self.pieces.append(Queen(self.color, (pawn.pos.x, pawn.pos.y)))
-                break
+        self.pawns.remove(pawn)
+        self.pieces.remove(pawn)
+        self.pieces.append(Queen(self.color, (pawn.pos.x, pawn.pos.y)))
 
     def removePiece(self, position):
         """
@@ -72,7 +71,7 @@ class Player:
         """
         pass
 
-    def isCheck(self):
+    def isCheck(self, opponent):
         """
         Docstrings
         """
